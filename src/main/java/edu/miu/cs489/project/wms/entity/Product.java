@@ -1,0 +1,22 @@
+package edu.miu.cs489.project.wms.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long productId;
+
+    private String name;
+    private String sku;
+    private double price;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
+}
