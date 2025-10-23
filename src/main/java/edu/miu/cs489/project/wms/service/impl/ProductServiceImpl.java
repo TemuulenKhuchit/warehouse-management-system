@@ -1,7 +1,7 @@
 package edu.miu.cs489.project.wms.service.impl;
 
-import edu.miu.cs489.project.wms.entity.Product;
 import edu.miu.cs489.project.wms.entity.Category;
+import edu.miu.cs489.project.wms.entity.Product;
 import edu.miu.cs489.project.wms.repository.ProductRepository;
 import edu.miu.cs489.project.wms.service.ProductService;
 import lombok.RequiredArgsConstructor;
