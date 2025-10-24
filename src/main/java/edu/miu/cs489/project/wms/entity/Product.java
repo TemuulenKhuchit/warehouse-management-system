@@ -17,6 +17,8 @@ public class Product {
     private Long productId;
 
     private String name;
+
+    @Column(unique = true, nullable = false)
     private String sku;
     private double price;
 

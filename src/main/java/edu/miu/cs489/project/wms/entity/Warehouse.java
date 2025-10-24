@@ -17,6 +17,7 @@ public class Warehouse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long warehouseId;
 
+    @Column(unique = true, nullable = false)
     private String name;
 
     @Embedded

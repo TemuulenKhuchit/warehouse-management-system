@@ -1,6 +1,8 @@
 package edu.miu.cs489.project.wms.controller;
 
+import edu.miu.cs489.project.wms.dto.WarehouseDto;
 import edu.miu.cs489.project.wms.entity.Warehouse;
+import edu.miu.cs489.project.wms.mapper.DtoMapper;
 import edu.miu.cs489.project.wms.service.WarehouseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static edu.miu.cs489.project.wms.mapper.DtoMapper.*;
 
 @RestController
 @RequestMapping("/api/warehouses")
@@ -18,24 +22,24 @@ public class WarehouseController {
 
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     @PostMapping("/createWarehouse")
-    public ResponseEntity<Warehouse> createWarehouse(@RequestBody Warehouse warehouse) {
-        return ResponseEntity.ok(warehouseService.createWarehouse(warehouse));
+    public ResponseEntity<WarehouseDto> createWarehouse(@RequestBody Warehouse warehouse) {
+        return ResponseEntity.ok(toDto(warehouseService.createWarehouse(warehouse)));
     }
 
     @GetMapping("/getWarehouseById/{id}")
-    public ResponseEntity<Warehouse> getWarehouseById(@PathVariable Long id) {
-        return ResponseEntity.ok(warehouseService.getWarehouseById(id));
+    public ResponseEntity<WarehouseDto> getWarehouseById(@PathVariable Long id) {
+        return ResponseEntity.ok(toDto(warehouseService.getWarehouseById(id)));
     }
 
     @GetMapping("/getAllWarehouses")
-    public ResponseEntity<List<Warehouse>> getAllWarehouses() {
-        return ResponseEntity.ok(warehouseService.getAllWarehouses());
+    public ResponseEntity<List<WarehouseDto>> getAllWarehouses() {
+        return ResponseEntity.ok(mapList(warehouseService.getAllWarehouses(), DtoMapper::toDto));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     @PutMapping("/updateWarehouse/{id}")
-    public ResponseEntity<Warehouse> updateWarehouse(@PathVariable Long id, @RequestBody Warehouse updated) {
-        return ResponseEntity.ok(warehouseService.updateWarehouse(id, updated));
+    public ResponseEntity<WarehouseDto> updateWarehouse(@PathVariable Long id, @RequestBody Warehouse updated) {
+        return ResponseEntity.ok(toDto(warehouseService.updateWarehouse(id, updated)));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
