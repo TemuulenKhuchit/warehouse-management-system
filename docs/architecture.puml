@@ -1,0 +1,39 @@
+@startuml Architecture
+title SmartWarehouse WMS - High-Level Architecture
+
+skinparam componentStyle rectangle
+skinparam rectangle {
+  BackgroundColor<<ext>> #F7F7F7
+  BorderColor<<ext>> #888
+}
+
+actor "Client (Swagger UI / Postman / Frontend)" as Client
+
+rectangle "SmartWarehouse WMS (Spring Boot)" {
+  [API Controllers\n(REST, DTOs, Validation)] as Controllers
+  [Service Layer\n(Business Logic, RBAC checks)] as Services
+  [Repositories\n(Spring Data JPA)] as Repos
+  [Security\n(JWT Filter, Method Security)] as Security
+}
+
+rectangle "Oracle DB\n(Products, Warehouses, Stock, Users, InventoryLog)" <<ext>> as Oracle
+rectangle "OpenAPI / Swagger UI" <<ext>> as Swagger
+
+Client --> Swagger
+Swagger --> Controllers
+Client --> Controllers : direct REST (optional)
+
+Controllers --> Services
+Services --> Repos
+Repos --> Oracle
+
+Security ..> Controllers : Bearer token\nvalidation (OncePerRequestFilter)
+Security ..> Services : @PreAuthorize role checks
+
+note right of Services
+- Stock in/out with InventoryLog
+- Product & Warehouse CRUD
+- Query: low-stock, category, price range
+end note
+
+@enduml
