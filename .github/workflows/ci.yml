@@ -1,4 +1,4 @@
-name: CI
+name: CI (Build • Test • Coverage • Java 25)
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Temurin JDK 25
@@ -19,23 +19,45 @@ jobs:
         with:
           distribution: temurin
           java-version: '25'
-          cache: maven
+          cache: 'maven'
 
-      - name: Build & Test (unit + integration on H2 profile)
-        run: mvn -B -q clean verify -Ptest
+      - name: Show Java & Maven
+        run: |
+          java -version
+          mvn -v
 
-      - name: Package JAR
-        run: mvn -B -q -DskipTests package
+      - name: Build & run tests (H2 test profile)
+        run: mvn -B clean verify -Dspring.profiles.active=test
 
-      - name: Upload JAR artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: wms-app
-          path: target/*.jar
-
-      - name: Upload JaCoCo coverage
+      # Upload test reports so you can read them in the Actions UI
+      - name: Upload surefire test reports (unit)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: jacoco-report
-          path: target/site/jacoco/*
+          name: surefire-reports
+          path: target/surefire-reports/
+
+      - name: Upload failsafe reports (integration, if any)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failsafe-reports
+          path: target/failsafe-reports/
+          if-no-files-found: ignore
+
+      - name: Upload JaCoCo coverage (HTML)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage
+          path: target/site/jacoco/
+          if-no-files-found: ignore
+
+      - name: Package JAR (skip tests for faster packaging)
+        run: mvn -q -DskipTests package
+
+      - name: Upload built JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar
