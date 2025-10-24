@@ -1,7 +1,6 @@
 package edu.miu.cs489.project.wms.controller;
 
 import edu.miu.cs489.project.wms.dto.StockDto;
-import edu.miu.cs489.project.wms.entity.Stock;
 import edu.miu.cs489.project.wms.service.StockService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
