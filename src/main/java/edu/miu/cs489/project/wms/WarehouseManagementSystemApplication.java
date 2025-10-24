@@ -8,7 +8,7 @@ public class WarehouseManagementSystemApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(WarehouseManagementSystemApplication.class, args);
-        System.out.println("✅ Warehouse Management System started successfully!");
+        System.out.println("✅ Warehouse Management System started successfully.");
     }
 
 }
